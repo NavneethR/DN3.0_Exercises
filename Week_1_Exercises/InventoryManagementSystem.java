@@ -90,3 +90,12 @@ class Product {
         System.out.println(productId + " " + productName + " " + quantity + " " + price);
     }
 }
+
+/* 
+Analysis: 
+ * time complexity of addToInventory: O(1)
+ * time complexity of updateIventory: O(N)
+ * time complexity of deleteFromInventory: O(N)
+ * 
+ * To improvise the updation and deletion functions we can directly pass the product instead of the product Id, then the time complexity becomes O(1) in both the cases.
+ */
