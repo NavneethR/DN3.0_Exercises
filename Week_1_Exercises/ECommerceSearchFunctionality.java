@@ -54,9 +54,58 @@ public class ECommerceSearchFunctionality {
         return null;
     }
 
+    static void bubbleSort(Product[] invetory) {
+        int len = inventory.length;
+        boolean swapped;
+
+        for (int ele1 = 0; ele1 < len - 1; ele1++) {
+            swapped = false;
+            for (int ele2 = 0; ele2 < len - 1 - ele1; ele2++) {
+                if (inventory[ele2].productId > inventory[ele2 + 1].productId) {
+                    Product temp = inventory[ele2];
+                    inventory[ele2] = inventory[ele2 + 1];
+                    inventory[ele2 + 1] = temp;
+                    swapped = true;
+                }
+            }
+            if (!swapped) {
+                break;
+            }
+        }
+    }
+
+    static void quickSort(Product[] inventory, int low, int high) {
+        if (low < high) {
+            int p = part(inventory, low, high);
+
+            quickSort(inventory, low, p - 1);
+            quickSort(inventory, p + 1, high);
+        }
+    }
+
+    private static int part(Product[] inventory, int low, int high) {
+        Product pivot = inventory[high];
+        int i = low - 1;
+
+        for (int j = low; j < high; j++) {
+            if (inventory[j].productId > pivot.productId) {
+                i++;
+                Product temp = inventory[i];
+                inventory[i] = inventory[j];
+                inventory[j] = temp;
+            }
+        }
+
+        Product temp = inventory[i + 1];
+        inventory[i + 1] = inventory[high];
+        inventory[high] = temp;
+
+        return i + 1;
+    }
+
     public static void main(String[] args) {
         /* Use your linear search algorithm here to find elements */
-        Arrays.sort(inventory);
+        /* Use either Quick sort or bubble sort here */
         /* Use your binary search algorithm here to find the element */
     }
 }
