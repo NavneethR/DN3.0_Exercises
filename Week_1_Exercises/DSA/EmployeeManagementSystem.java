@@ -1,4 +1,4 @@
-package Week_1_Exercises;
+package Week_1_Exercises.DSA;
 
 import java.util.*;
 
@@ -65,7 +65,7 @@ class EmployeeManagementSystem {
         System.out.println("Employee cannot be found!");
     }
 
-    public static void main(String[] args) {
+    public static void maclassin(String[] args) {
         EmployeeManagementSystem companyEmpolyees = new EmployeeManagementSystem(700);
         /*
          * Use the above methods to modify the company Employees, using add, search,
@@ -83,7 +83,7 @@ class EmployeeManagementSystem {
  * time complexity of deleteEmployee: O(N)
  * 
  * limitations of array includes its inability to change its size dynamically
- * when elements are being inserted or operated upon, Usually deleting and
- * searching elements in an array take O(N) time which is slower as compared to
- * Data Structures like
+ * when elements are being inserted or operated upon, and deleting and
+ * searching elements in an array takes O(N) time which is slower as compared to
+ * Data Structures like HashSet.
  */

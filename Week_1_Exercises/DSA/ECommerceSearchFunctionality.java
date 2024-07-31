@@ -1,4 +1,4 @@
-package Week_1_Exercises;
+package Week_1_Exercises.DSA;
 
 import java.util.*;
 
