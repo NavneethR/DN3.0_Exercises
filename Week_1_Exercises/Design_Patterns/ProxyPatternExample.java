@@ -1,5 +1,7 @@
 package Week_1_Exercises.Design_Patterns;
 
+import java.util.*;
+
 interface Image {
     void display();
 }
