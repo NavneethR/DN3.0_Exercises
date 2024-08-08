@@ -1,21 +1,21 @@
 package com.library.aspect;
 
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.After;
+import org.springframework.stereotype.Component;
 
 @Aspect
+@Component
 public class LoggingAspect {
 
-    @Around("execution(* com.library.service.BookService.*(..))")
-    public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
-        long start = System.currentTimeMillis();
+    @Before("execution(* com.library.service.BookService.*(..))")
+    public void beforeAdvice() {
+        System.out.println("Executing method in BookService - Before Advice");
+    }
 
-        Object proceed = joinPoint.proceed();
-
-        long executionTime = System.currentTimeMillis() - start;
-        System.out.println(joinPoint.getSignature() + " executed in " + executionTime + "ms");
-
-        return proceed;
+    @After("execution(* com.library.service.BookService.*(..))")
+    public void afterAdvice() {
+        System.out.println("Executed method in BookService - After Advice");
     }
 }
