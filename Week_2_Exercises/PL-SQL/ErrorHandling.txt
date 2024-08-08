@@ -1,0 +1,17 @@
+ALTER TABLE Customers ADD (IsVIP VARCHAR2(3));
+BEGIN
+    FOR customer_rec IN (
+        SELECT CustomerID, Balance
+        FROM Customers
+        WHERE Balance > 10000
+    ) LOOP
+        UPDATE Customers
+        SET IsVIP = 'YES'
+        WHERE CustomerID = customer_rec.CustomerID;
+
+        DBMS_OUTPUT.PUT_LINE('CustomerID ' || customer_rec.CustomerID || ' is now VIP.');
+    END LOOP;
+    
+    COMMIT;  -- Commit the changes
+END;
+/

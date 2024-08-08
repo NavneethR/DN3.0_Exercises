@@ -1,0 +1,43 @@
+CREATE OR REPLACE FUNCTION CalculateAge(
+    p_dob IN DATE
+) RETURN NUMBER AS
+    v_age NUMBER;
+BEGIN
+    SELECT EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM p_dob) INTO v_age
+    FROM dual;
+
+    RETURN v_age;
+END;
+/
+
+CREATE OR REPLACE FUNCTION CalculateMonthlyInstallment(
+    p_loanAmount IN NUMBER,
+    p_interestRate IN NUMBER,
+    p_durationYears IN NUMBER
+) RETURN NUMBER AS
+    v_monthlyRate NUMBER;
+    v_months NUMBER;
+    v_monthlyInstallment NUMBER;
+BEGIN
+    v_monthlyRate := p_interestRate / 12 / 100;
+    v_months := p_durationYears * 12;
+
+    -- Calculate monthly installment using the formula for an annuity
+    v_monthlyInstallment := p_loanAmount * v_monthlyRate / (1 - POWER(1 + v_monthlyRate, -v_months));
+
+    RETURN v_monthlyInstallment;
+END;
+/
+
+CREATE OR REPLACE FUNCTION HasSufficientBalance(
+    p_accountID IN NUMBER,
+    p_amount IN NUMBER
+) RETURN BOOLEAN AS
+    v_balance NUMBER;
+BEGIN
+    SELECT Balance INTO v_balance FROM Accounts WHERE AccountID = p_accountID;
+
+    RETURN v_balance >= p_amount;
+END;
+/
+

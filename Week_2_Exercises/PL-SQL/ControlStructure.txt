@@ -1,0 +1,54 @@
+DECLARE
+    v_age NUMBER;
+    CURSOR c_loans IS
+        SELECT l.LoanID, l.InterestRate
+        FROM Loans l
+        JOIN Customers c ON l.CustomerID = c.CustomerID
+        WHERE EXTRACT(YEAR FROM SYSDATE) - EXTRACT(YEAR FROM c.DOB) > 60;
+BEGIN
+    FOR loan_rec IN c_loans LOOP
+        -- Apply a 1% discount to the loan interest rate
+        UPDATE Loans
+        SET InterestRate = loan_rec.InterestRate - 1
+        WHERE LoanID = loan_rec.LoanID;
+
+        DBMS_OUTPUT.PUT_LINE('Applied discount to LoanID: ' || loan_rec.LoanID);
+    END LOOP;
+    
+    COMMIT;  -- Commit the changes
+END;
+/
+
+ALTER TABLE Customers ADD (IsVIP VARCHAR2(3));
+
+BEGIN
+    FOR customer_rec IN (
+        SELECT CustomerID, Balance
+        FROM Customers
+        WHERE Balance > 10000
+    ) LOOP
+        UPDATE Customers
+        SET IsVIP = 'YES'
+        WHERE CustomerID = customer_rec.CustomerID;
+
+        DBMS_OUTPUT.PUT_LINE('CustomerID ' || customer_rec.CustomerID || ' is now VIP.');
+    END LOOP;
+    
+    COMMIT;  -- Commit the changes
+END;
+/
+
+DECLARE
+    CURSOR c_loans IS
+        SELECT l.LoanID, c.Name, l.EndDate
+        FROM Loans l
+        JOIN Customers c ON l.CustomerID = c.CustomerID
+        WHERE l.EndDate BETWEEN SYSDATE AND SYSDATE + 30;
+BEGIN
+    FOR loan_rec IN c_loans LOOP
+        DBMS_OUTPUT.PUT_LINE('Reminder: LoanID ' || loan_rec.LoanID ||
+                             ' for customer ' || loan_rec.Name ||
+                             ' is due on ' || TO_CHAR(loan_rec.EndDate, 'YYYY-MM-DD'));
+    END LOOP;
+END;
+/

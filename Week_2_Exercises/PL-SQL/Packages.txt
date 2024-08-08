@@ -1,0 +1,99 @@
+CREATE OR REPLACE PACKAGE CustomerManagement AS
+    PROCEDURE AddCustomer(p_customerID NUMBER, p_name VARCHAR2, p_dob DATE, p_balance NUMBER);
+    PROCEDURE UpdateCustomerDetails(p_customerID NUMBER, p_name VARCHAR2, p_dob DATE);
+    FUNCTION GetCustomerBalance(p_customerID NUMBER) RETURN NUMBER;
+END CustomerManagement;
+/
+
+CREATE OR REPLACE PACKAGE BODY CustomerManagement AS
+    PROCEDURE AddCustomer(p_customerID NUMBER, p_name VARCHAR2, p_dob DATE, p_balance NUMBER) AS
+    BEGIN
+        INSERT INTO Customers (CustomerID, Name, DOB, Balance, LastModified)
+        VALUES (p_customerID, p_name, p_dob, p_balance, SYSDATE);
+
+        COMMIT;
+    END AddCustomer;
+
+    PROCEDURE UpdateCustomerDetails(p_customerID NUMBER, p_name VARCHAR2, p_dob DATE) AS
+    BEGIN
+        UPDATE Customers
+        SET Name = p_name, DOB = p_dob, LastModified = SYSDATE
+        WHERE CustomerID = p_customerID;
+
+        COMMIT;
+    END UpdateCustomerDetails;
+
+    FUNCTION GetCustomerBalance(p_customerID NUMBER) RETURN NUMBER AS
+        v_balance NUMBER;
+    BEGIN
+        SELECT Balance INTO v_balance FROM Customers WHERE CustomerID = p_customerID;
+        RETURN v_balance;
+    END GetCustomerBalance;
+END CustomerManagement;
+/
+CREATE OR REPLACE PACKAGE EmployeeManagement AS
+    PROCEDURE HireEmployee(p_employeeID NUMBER, p_name VARCHAR2, p_position VARCHAR2, p_salary NUMBER, p_department VARCHAR2, p_hireDate DATE);
+    PROCEDURE UpdateEmployeeDetails(p_employeeID NUMBER, p_name VARCHAR2, p_position VARCHAR2, p_salary NUMBER, p_department VARCHAR2);
+    FUNCTION CalculateAnnualSalary(p_employeeID NUMBER) RETURN NUMBER;
+END EmployeeManagement;
+/
+
+CREATE OR REPLACE PACKAGE BODY EmployeeManagement AS
+    PROCEDURE HireEmployee(p_employeeID NUMBER, p_name VARCHAR2, p_position VARCHAR2, p_salary NUMBER, p_department VARCHAR2, p_hireDate DATE) AS
+    BEGIN
+        INSERT INTO Employees (EmployeeID, Name, Position, Salary, Department, HireDate)
+        VALUES (p_employeeID, p_name, p_position, p_salary, p_department, p_hireDate);
+
+        COMMIT;
+    END HireEmployee;
+
+    PROCEDURE UpdateEmployeeDetails(p_employeeID NUMBER, p_name VARCHAR2, p_position VARCHAR2, p_salary NUMBER, p_department VARCHAR2) AS
+    BEGIN
+        UPDATE Employees
+        SET Name = p_name, Position = p_position, Salary = p_salary, Department = p_department
+        WHERE EmployeeID = p_employeeID;
+
+        COMMIT;
+    END UpdateEmployeeDetails;
+
+    FUNCTION CalculateAnnualSalary(p_employeeID NUMBER) RETURN NUMBER AS
+        v_salary NUMBER;
+    BEGIN
+        SELECT Salary INTO v_salary FROM Employees WHERE EmployeeID = p_employeeID;
+        RETURN v_salary * 12;
+    END CalculateAnnualSalary;
+END EmployeeManagement;
+/
+
+CREATE OR REPLACE PACKAGE AccountOperations AS
+    PROCEDURE OpenAccount(p_accountID NUMBER, p_customerID NUMBER, p_accountType VARCHAR2, p_balance NUMBER);
+    PROCEDURE CloseAccount(p_accountID NUMBER);
+    FUNCTION GetTotalCustomerBalance(p_customerID NUMBER) RETURN NUMBER;
+END AccountOperations;
+/
+
+CREATE OR REPLACE PACKAGE BODY AccountOperations AS
+    PROCEDURE OpenAccount(p_accountID NUMBER, p_customerID NUMBER, p_accountType VARCHAR2, p_balance NUMBER) AS
+    BEGIN
+        INSERT INTO Accounts (AccountID, CustomerID, AccountType, Balance, LastModified)
+        VALUES (p_accountID, p_customerID, p_accountType, p_balance, SYSDATE);
+
+        COMMIT;
+    END OpenAccount;
+
+    PROCEDURE CloseAccount(p_accountID NUMBER) AS
+    BEGIN
+        DELETE FROM Accounts WHERE AccountID = p_accountID;
+
+        COMMIT;
+    END CloseAccount;
+
+    FUNCTION GetTotalCustomerBalance(p_customerID NUMBER) RETURN NUMBER AS
+        v_totalBalance NUMBER;
+    BEGIN
+        SELECT SUM(Balance) INTO v_totalBalance FROM Accounts WHERE CustomerID = p_customerID;
+        RETURN v_totalBalance;
+    END GetTotalCustomerBalance;
+END AccountOperations;
+/
+

@@ -1,0 +1,51 @@
+DECLARE
+    CURSOR c_monthlyStatements IS
+        SELECT c.CustomerID, c.Name, t.TransactionDate, t.Amount, t.TransactionType
+        FROM Customers c
+        JOIN Accounts a ON c.CustomerID = a.CustomerID
+        JOIN Transactions t ON a.AccountID = t.AccountID
+        WHERE TRUNC(t.TransactionDate, 'MM') = TRUNC(SYSDATE, 'MM');
+BEGIN
+    FOR rec IN c_monthlyStatements LOOP
+        DBMS_OUTPUT.PUT_LINE('CustomerID: ' || rec.CustomerID ||
+                             ', Name: ' || rec.Name ||
+                             ', Date: ' || TO_CHAR(rec.TransactionDate, 'YYYY-MM-DD') ||
+                             ', Amount: ' || rec.Amount ||
+                             ', Type: ' || rec.TransactionType);
+    END LOOP;
+END;
+/
+DECLARE
+    CURSOR c_annualFee IS
+        SELECT AccountID, Balance
+        FROM Accounts;
+    v_annualFee CONSTANT NUMBER := 50;  -- Example annual fee amount
+BEGIN
+    FOR rec IN c_annualFee LOOP
+        UPDATE Accounts
+        SET Balance = Balance - v_annualFee
+        WHERE AccountID = rec.AccountID;
+
+        DBMS_OUTPUT.PUT_LINE('Applied annual fee to AccountID ' || rec.AccountID);
+    END LOOP;
+
+    COMMIT;  -- Commit the changes
+END;
+/
+DECLARE
+    CURSOR c_loans IS
+        SELECT LoanID, InterestRate
+        FROM Loans;
+    v_newRate CONSTANT NUMBER := 4;  -- Example new interest rate
+BEGIN
+    FOR rec IN c_loans LOOP
+        UPDATE Loans
+        SET InterestRate = v_newRate
+        WHERE LoanID = rec.LoanID;
+
+        DBMS_OUTPUT.PUT_LINE('Updated interest rate for LoanID ' || rec.LoanID);
+    END LOOP;
+
+    COMMIT;  -- Commit the changes
+END;
+/
