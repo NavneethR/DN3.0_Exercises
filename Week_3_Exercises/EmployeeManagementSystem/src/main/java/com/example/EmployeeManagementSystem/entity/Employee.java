@@ -8,7 +8,6 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "employees")
 public class Employee {
 
     @Id
@@ -20,6 +19,6 @@ public class Employee {
     private String email;
 
     @ManyToOne
-    @JoinColumn(name = "department_id", nullable = false)
+    @JoinColumn(name = "department_id")
     private Department department;
 }
