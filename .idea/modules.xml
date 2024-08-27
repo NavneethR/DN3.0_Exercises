@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/DN3.0_Exercises.iml" filepath="$PROJECT_DIR$/.idea/DN3.0_Exercises.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Week_2_Exercises/Spring_Core_Maven/LibraryManagement/LibraryManagement.iml" filepath="$PROJECT_DIR$/Week_2_Exercises/Spring_Core_Maven/LibraryManagement/LibraryManagement.iml" />
-    </modules>
-  </component>
-</project>
